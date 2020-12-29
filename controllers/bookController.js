@@ -1,13 +1,53 @@
 var Book = require("../models/book");
+var Author = require("../models/author");
+var Genre = require("../models/genre");
+var BookInstance = require("../models/bookinstance");
 
-module.exports = new class {
+var async = require("async");
 
+module.exports = new (class {
   index(req, res) {
-    res.send('NOT IMPLEMENTED: Site Home Page');
+    const tasks = {
+      book_count(callback) {
+        Book.countDocuments({}, callback); // Pass an empty object as match condition to find all documents of this collection
+      },
+
+      book_instance_count(callback) {
+        BookInstance.countDocuments({}, callback);
+      },
+
+      book_instance_available_count(callback) {
+        BookInstance.countDocuments({ status: "Available" }, callback);
+      },
+
+      author_count(callback) {
+        Author.countDocuments({}, callback);
+      },
+
+      genre_count(callback) {
+        Genre.countDocuments({}, callback);
+      },
+    };
+
+    async.parallel(tasks, function (err, results) {
+      console.log(":DevEnv 👋 log", JSON.stringify(results));
+      res.render("index", {
+        title: "Local Library Home",
+        error: err,
+        data: results,
+      });
+    });
   }
 
-  book_list(req, res) {
-    res.send("NOT IMPLEMENTED: book list");
+  book_list(req, res, next) {
+    Book.find({}, "title author")
+      .populate("author")
+      .exec(function (err, book_list) {
+        if (err) {
+          return next(err);
+        }
+        res.render("book_list", { title: "Book List", book_list });
+      });
   }
 
   // Display detail page for a specific book.
@@ -44,4 +84,4 @@ module.exports = new class {
   book_update_post(req, res) {
     res.send("NOT IMPLEMENTED: book update POST");
   }
-};
+})();

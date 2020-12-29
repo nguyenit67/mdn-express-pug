@@ -1,5 +1,4 @@
 var express = require('express');
-const { get } = require('../app');
 var router = express.Router();
 
 /* GET users listing. */
