@@ -1,13 +1,21 @@
-var BookInstance = require("../models/bookinstance");
+/* eslint-disable camelcase */
+const BookInstance = require("../models/bookinstance");
 
-module.exports = new class {
-  bookinstance_list(req, res) {
-    res.send("NOT IMPLEMENTED: bookinstance list");
+module.exports = new (class {
+  bookinstance_list(req, res, next) {
+    BookInstance.find()
+      .populate("book")
+      .exec((error, bookinstance_list) => {
+        if (error) {
+          return next(error);
+        }
+        res.render("bookinstance_list", { title: "Book Instance List", bookinstance_list });
+      });
   }
 
   // Display detail page for a specific bookinstance.
   bookinstance_detail(req, res) {
-    res.send("NOT IMPLEMENTED: bookinstance detail: " + req.params.id);
+    res.send(`NOT IMPLEMENTED: bookinstance detail: ${req.params.id}`);
   }
 
   // Display bookinstance create form on GET.
@@ -39,4 +47,4 @@ module.exports = new class {
   bookinstance_update_post(req, res) {
     res.send("NOT IMPLEMENTED: bookinstance update POST");
   }
-};
+})();

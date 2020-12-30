@@ -1,13 +1,21 @@
-var Author = require("../models/author");
+const Author = require("../models/author");
 
 module.exports = new class {
-  author_list(req, res) {
-    res.send("NOT IMPLEMENTED: Author list");
+  author_list(req, res, next) {
+    Author.find()
+      .sort([["family_name", "ascending"]])
+      .exec(function (error, list_authors) {
+        if (error) {
+          return next(error);
+        }
+        // Successful, so render
+        res.render("author_list", { title: "Author List", author_list: list_authors });
+      });
   }
 
   // Display detail page for a specific Author.
   author_detail(req, res) {
-    res.send("NOT IMPLEMENTED: Author detail: " + req.params.id);
+    res.send(`NOT IMPLEMENTED: Author detail: ${req.params.id}`);
   }
 
   // Display Author create form on GET.
@@ -39,4 +47,4 @@ module.exports = new class {
   author_update_post(req, res) {
     res.send("NOT IMPLEMENTED: Author update POST");
   }
-};
+}();

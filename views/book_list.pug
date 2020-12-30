@@ -6,13 +6,8 @@ block content
     //- <script>
     //- Nashu sort
     - 
-      book_list.sort(function(a, b) {
-        let textA = a.title.toUpperCase();
-        let textB = b.title.toUpperCase();
-        return 
-          (textA < textB) ? -1 :
-          (textA > textB) ?  1 : 0;
-      });
+      book_list.sort(function(a, b) { const textA = a.title.toUpperCase(); const textB = b.title.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ?  1 : 0; });
+
     script
       | const data = !{JSON.stringify(book_list)}
       | console.table(data);
