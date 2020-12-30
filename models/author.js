@@ -15,11 +15,16 @@ AuthorSchema.virtual("name").get(function () {
   return `${this.family_name}, ${this.first_name}`;
 });
 
-// Virtual for author's lifespan
-AuthorSchema.virtual("lifespan").get(function () {
+// Virtual for author's lifespan in years
+AuthorSchema.virtual("lifespan_in_years").get(function () {
   return (
     this.date_of_death.getYear() - this.date_of_birth.getYear()
   ).toString();
+});
+
+// Virtual for author's lifespan in years
+AuthorSchema.virtual("lifespan_formatted").get(function () {
+  return `${this.date_of_birth_formatted} &ndash; ${this.date_of_death_formatted}`;
 });
 
 AuthorSchema.virtual("url").get(function () {

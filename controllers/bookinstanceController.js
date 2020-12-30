@@ -14,8 +14,20 @@ module.exports = new (class {
   }
 
   // Display detail page for a specific bookinstance.
-  bookinstance_detail(req, res) {
-    res.send(`NOT IMPLEMENTED: bookinstance detail: ${req.params.id}`);
+  bookinstance_detail(req, res, next) {
+    BookInstance.findById(req.params.id)
+      .populate("book")
+      .exec(function (error, bookinstance) {
+        if (error) { return next(error); }
+
+        if (bookinstance == null) { // No results.
+          const err404 = new Error("Genre not found");
+          err404.status = 404;
+          return next(err404);
+        }
+        // Successful, so render
+        res.render("bookinstance_detail", { title: `Copy: ${bookinstance.book.title}`, bookinstance });
+      });
   }
 
   // Display bookinstance create form on GET.

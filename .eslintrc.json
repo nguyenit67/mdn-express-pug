@@ -2,7 +2,9 @@
   "env": {
     "browser": true,
     "es2021": true,
-    "node": true
+    "node": true,
+    "es6": true,
+    "commonjs": true
   },
   "extends": ["airbnb-base"],
   "parserOptions": {
@@ -16,6 +18,7 @@
     "no-unused-vars": "warn",
     "prefer-template": "warn",
     "no-trailing-spaces": "warn",
+    "brace-style": ["off", "stroustrup", { "allowSingleLine": false }],
 
     "no-console": "off",
     "no-multiple-empty-lines": "off",
