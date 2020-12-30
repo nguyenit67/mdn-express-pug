@@ -11,9 +11,10 @@ block content
 
     dl
       each book in genre_books
-        dt
-          a(href=book.url) #{book.title}
-        dd #{book.summary}
+        div
+          dt
+            a(href=book.url) #{book.title}
+          dd #{book.summary}
 
       else
         p This genre has no books
