@@ -3,7 +3,7 @@
 // app = Express();
 // port = 8080;
 
-const { compile } = require("pug");
+// const { compile } = require("pug");
 
 // app.get("/", (request, response) => {
 //   response.send("touch sou");
@@ -13,6 +13,10 @@ const { compile } = require("pug");
 //   console.log(`Example app listening on port ${port}!`);
 // });
 
-compile()
+new class {
+  fn1 = [];
 
+  fn2() {
 
+  }
+}()
