@@ -8,8 +8,10 @@
   },
   "extends": ["airbnb-base"],
   "parserOptions": {
+    
+    "parser": "babel-eslint",
     "ecmaVersion": 12,
-    "sourceType": "module"
+    "sourceType": "script",
   },
   "rules": {
     "quotes": ["error", "double"],
@@ -18,8 +20,9 @@
     "no-unused-vars": "warn",
     "prefer-template": "warn",
     "no-trailing-spaces": "warn",
+    // "semi":"warn",
+    
     "brace-style": ["off", "stroustrup", { "allowSingleLine": false }],
-
     "no-console": "off",
     "no-multiple-empty-lines": "off",
     "prefer-arrow-callback": "off",
