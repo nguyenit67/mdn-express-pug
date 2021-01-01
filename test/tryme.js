@@ -12,11 +12,12 @@
 // app.listen(port, () => {
 //   console.log(`Example app listening on port ${port}!`);
 // });
+const a = {
+  pun(arg) {
+    this.arg = arg;
+  },
 
-new class {
-  fn1 = [];
-
-  fn2() {
-
-  }
-}()
+  callback: () => {
+    console.log(this.arg);
+  },
+};
