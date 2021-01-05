@@ -1,0 +1,58 @@
+extends layout
+
+block content
+  h1= title
+
+  form(method="POST", action="")  
+    .form-group
+      label(for="title") Title:
+      input#title.form-control(type="text", name="title" placeholder='Name of book' value=((undefined===book) ? "" : book.title) required)  
+
+    .form-group
+      label(for="author") Author: 
+      select#author.form-control(type="select", name="author", placeholder="Select author", required)
+        - 
+          author_list.sort((a, b) => {
+            const textA = a.family_name.toUpperCase(); 
+            const textB = b.family_name.toUpperCase(); 
+            return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+          });
+        //- default disabled prompt
+        option(disabled, selected) Select one author
+        for author in author_list
+          if book
+            option(value=author._id, selected=((author._id.toString()===book.author._id.toString()) ? true : false))= author.name
+            
+            - const repr = JSON.stringify(book.author);
+            - console.log(repr);
+          else
+            option(value=author._id)= author.name
+
+
+
+    .form-group
+      label(for="summary") Summary:
+      textarea#summary.form-control(type="textare", name="summary", placeholder="Summary" required).
+        #{ (undefined===book) ? "" : book.summary}
+
+    .form-group
+      label(for="isbn") ISBN:
+      input#isbn.form-control(type="text", name="isbn", placeholder="ISBN13", value=(undefined===book) ? "" : book.isbn)
+    
+    .form-group
+      label Genre:
+      div
+        for genre in genre_list
+          div(style="display: inline; padding-right: 10px;")
+            label
+              input.checkbox-input(type="checkbox", name="genre", value=genre._id, checked=genre.checked)
+              |#{genre.name}
+
+    button.btn.btn-primary(type="submit") Submit
+
+  if errors
+    ul
+      for err in errors
+        li!= err.msg
+      
+    

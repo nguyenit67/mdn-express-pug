@@ -20,6 +20,7 @@
     "prefer-template": "warn",
     "no-trailing-spaces": "warn",
     "no-unreachable": "warn",
+    "no-param-reassign": "warn",
     // "semi":"warn",
 
     "brace-style": ["off", "stroustrup", { "allowSingleLine": false }],

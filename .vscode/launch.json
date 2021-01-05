@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "type": "node-terminal",
+            "name": "Run Script: debugstart",
+            "request": "launch",
+            "command": "npm run debugstart",
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}
