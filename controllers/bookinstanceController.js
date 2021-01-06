@@ -1,5 +1,7 @@
 /* eslint-disable camelcase */
+const { body, validationResult } = require("express-validator");
 const BookInstance = require("../models/bookinstance");
+const Book = require("../models/book");
 
 module.exports = new (class {
   bookinstance_list(req, res, next) {
@@ -17,7 +19,7 @@ module.exports = new (class {
   bookinstance_detail(req, res, next) {
     BookInstance.findById(req.params.id)
       .populate("book")
-      .exec(function (error, bookinstance) {
+      .exec((error, bookinstance) => {
         if (error) { return next(error); }
 
         if (bookinstance == null) { // No results.
@@ -31,32 +33,96 @@ module.exports = new (class {
   }
 
   // Display bookinstance create form on GET.
-  bookinstance_create_get(req, res) {
-    res.send("NOT IMPLEMENTED: bookinstance create GET");
+  bookinstance_create_get(req, res, next) {
+    Book.find({}, "title")
+      .exec((err, book_list) => {
+        if (err) {
+          return next(err);
+        }
+        res.render("bookinstance_form",
+          { title: "Create BookInstance",
+            book_list,
+            status_enum: BookInstance.schema.path("status").enumValues,
+          });
+      });
   }
 
   // Handle bookinstance create on POST.
-  bookinstance_create_post(req, res) {
-    res.send("NOT IMPLEMENTED: bookinstance create POST");
+  get bookinstance_create_post() {
+    return [
+      // Validate and sanitise fields.
+      body("book", "Book must be specified").trim().isLength({ min: 1 }).escape(),
+      body("book").custom((value) => {
+        return Book.findById(value).then((book) => {
+          if (!book) {
+            return Promise.reject(new Error("Book not found! :<"));
+          }
+        }).catch((err) => {
+          return Promise.reject(new Error("Book not found! :<"));
+        });
+      }),
+      body("imprint", "Imprint must be specified").trim().isLength({ min: 1 }).escape(),
+      body("status").escape(),
+      body("due_back", "Invalid date").optional({ checkFalsy: true }).isISO8601().toDate(),
+      (req, res, next) => {
+        const errors = validationResult(req);
+        const bookinstance = new BookInstance(
+          { book: req.body.book,
+            imprint: req.body.imprint,
+            status: req.body.status,
+            due_back: req.body.due_back,
+          });
+
+        if (errors.isEmpty()) {
+          bookinstance.save((saveErr) => {
+            if (saveErr) {
+              return next(saveErr);
+            }
+            res.redirect(bookinstance.url);
+          });
+        }
+        else {
+          Book.find({}, "title")
+            .exec((err, book_list) => {
+              if (err) { return next(err); }
+
+              let selected_book = bookinstance.book?.toString();
+              if ("book" in errors.mapped()) {
+                selected_book = null;
+              }
+              // Successful, so render.
+              res.render("bookinstance_form",
+                { title: "Create BookInstance",
+                  book_list,
+                  bookinstance,
+                  selected_book,
+                  errors: errors.array(),
+                  status_enum: BookInstance.schema.path("status").enumValues,
+                });
+            });
+        }
+      },
+
+    ];
   }
 
   // Display bookinstance delete form on GET.
-  bookinstance_delete_get(req, res) {
+  bookinstance_delete_get(req, res, next) {
     res.send("NOT IMPLEMENTED: bookinstance delete GET");
   }
 
   // Handle bookinstance delete on POST.
-  bookinstance_delete_post(req, res) {
+  bookinstance_delete_post(req, res, next) {
     res.send("NOT IMPLEMENTED: bookinstance delete POST");
   }
 
   // Display bookinstance update form on GET.
-  bookinstance_update_get(req, res) {
+  bookinstance_update_get(req, res, next) {
     res.send("NOT IMPLEMENTED: bookinstance update GET");
   }
 
   // Handle bookinstance update on POST.
-  bookinstance_update_post(req, res) {
+  bookinstance_update_post(req, res, next) {
     res.send("NOT IMPLEMENTED: bookinstance update POST");
   }
 })();
