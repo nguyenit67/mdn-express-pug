@@ -7,6 +7,14 @@
     "livestart": "nodemon ./bin/www",
     "debugstart": "DEBUG=express:* npm run livestart"
   },
+  "nodemonConfig": {
+    "ignore": [
+      "test/*",
+      "tests/*",
+      "public/*"
+    ],
+    "delay": "2000"
+  },
   "dependencies": {
     "async": "^3.2.0",
     "cookie-parser": "~1.4.4",
