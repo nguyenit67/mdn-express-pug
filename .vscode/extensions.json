@@ -2,6 +2,8 @@
   "recommendations": [
     "juninhosilva.package-plus-plus",
     "tabnine.tabnine-vscode",
-    "orkhanjafarovr.vscode-here-and-now"
+    "orkhanjafarovr.vscode-here-and-now",
+    "wolray.any-swap",
+    "davidmart.swap-word"
   ]
 }
