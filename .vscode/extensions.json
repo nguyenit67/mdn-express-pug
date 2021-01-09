@@ -4,6 +4,8 @@
     "tabnine.tabnine-vscode",
     "orkhanjafarovr.vscode-here-and-now",
     "wolray.any-swap",
-    "davidmart.swap-word"
+    "davidmart.swap-word",
+    "joeberria.statusbarerror",
+    "usernamehw.errorlens"
   ]
 }

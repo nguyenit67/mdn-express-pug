@@ -1,23 +1,17 @@
-// { response } = require("express");
-// Express = require("express");
-// app = Express();
-// port = 8080;
+/* eslint-disable no-var */
+/* eslint-disable func-names */
+/* eslint-disable no-new-func */
 
-// const { compile } = require("pug");
-
-// app.get("/", (request, response) => {
-//   response.send("touch sou");
-// });
-
-// app.listen(port, () => {
-//   console.log(`Example app listening on port ${port}!`);
-// });
-const a = {
-  pun(arg) {
-    this.arg = arg;
-  },
-
-  callback: () => {
-    console.log(this.arg);
-  },
+var mapByProps = function (objs, props = "") {
+  const propsLiteral = `{${props.split(" ").join(",")}}`;
+  return objs.map(new Function(propsLiteral, `return ${propsLiteral}`));
 };
+// const a = {
+//   pun(arg) {
+//     this.arg = arg;
+//   },
+
+//   callback: () => {
+//     console.log(this.arg);
+//   },
+// };
