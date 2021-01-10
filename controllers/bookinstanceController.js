@@ -108,12 +108,28 @@ module.exports = new (class {
 
   // Display bookinstance delete form on GET.
   bookinstance_delete_get(req, res, next) {
-    res.send("NOT IMPLEMENTED: bookinstance delete GET");
+    BookInstance.findById(req.params.id)
+      .populate("book")
+      .exec((err, bookinstance) => {
+        // network error or db error
+        if (err) {
+          return next(err);
+        }
+
+        res.render("bookinstance_delete", { title: "Delete BookInstance", bookinstance });
+      });
   }
 
   // Handle bookinstance delete on POST.
   bookinstance_delete_post(req, res, next) {
-    res.send("NOT IMPLEMENTED: bookinstance delete POST");
+    // Book Copy has no dependencies. Delete object and redirect to the list of copies.
+    BookInstance.findByIdAndRemove(req.params.id, (findAndRmError) => {
+      if (findAndRmError) {
+        return next(findAndRmError);
+      }
+      // Success - go to book instance list
+      res.redirect("/catalog/bookinstances");
+    });
   }
 
   // Display bookinstance update form on GET.

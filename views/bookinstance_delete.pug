@@ -1,8 +1,7 @@
 extends layout
 
 block content
-
-  h1 ID: #{bookinstance._id}
+  h1 #{title}: #{bookinstance._id}
 
   p #[strong Title: ]
     a(href=bookinstance.book.url) #{bookinstance.book.title}
@@ -21,7 +20,11 @@ block content
     p #[strong Due back:] #{bookinstance.due_back_formatted}
 
   hr
-  p
-    a(href=bookinstance.url+'/delete') Delete The Copy
-  p
-    a(href=bookinstance.url+'/update') Update The Copy
+  p Do you really want to delete THIS COPY?
+
+  form(action="" method="POST")
+    .form-group
+      input#authorid.form-control(type="hidden", name="authorid", value=bookinstance._id, required)
+    
+    button.btn.btn-primary(type="submit") Submit
+
