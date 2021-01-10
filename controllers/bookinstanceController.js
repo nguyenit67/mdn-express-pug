@@ -123,7 +123,7 @@ module.exports = new (class {
   // Handle bookinstance delete on POST.
   bookinstance_delete_post(req, res, next) {
     // Book Copy has no dependencies. Delete object and redirect to the list of copies.
-    BookInstance.findByIdAndRemove(req.params.id, (findAndRmError) => {
+    BookInstance.findByIdAndRemove(req.body.bookinstance_id, (findAndRmError) => {
       if (findAndRmError) {
         return next(findAndRmError);
       }
