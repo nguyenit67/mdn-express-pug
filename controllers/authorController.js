@@ -133,7 +133,11 @@ module.exports = new class {
       // Success
       if (results.authors_books.length > 0) {
         // Author has books. Render in same way as for GET route.
-        res.render("author_delete", { title: "Delete Author", author: results.author, author_books: results.authors_books });
+        res.render("author_delete",
+          { title: "Delete Author",
+            author: results.author,
+            author_books: results.authors_books,
+          });
 
       }
       else {
