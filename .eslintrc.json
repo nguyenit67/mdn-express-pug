@@ -24,6 +24,7 @@
     "no-multiple-empty-lines": "warn",
     // "semi":"warn",
 
+    "func-names": "off",
     "object-curly-newline": "off",
     "function-paren-newline": "off",
     "brace-style": ["off", "stroustrup", { "allowSingleLine": false }],
