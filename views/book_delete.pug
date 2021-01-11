@@ -1,39 +1,43 @@
 extends layout
 
 block content
+  h1 #{title}: #{book.title}
 
-  h1= title
-
-    p #[strong Author:]
+  //- book info
+  p #[strong Author:]
     a(href=book.author.url) #{book.author.name}
   p #[strong Summary:] #{book.summary}
   p #[strong ISBN:] #{book.isbn}
   p #[strong Genre:]
-    each val, index in book.genre
-      a(href=val.url) #{val.name}
+    for genre, index in book.genre
+      a(href=genre.url) #{genre.name}
       if index < book.genre.length - 1
         | #{", "}
     
-  div(style='margin-left:20px;margin-top:20px')
-    h4 Copies
+  //- display book copies to be delete
+  if book_instances.length > 0
+    p #[strong Delete the following copies before attempting to delete this book.]
+    
+    div(style='margin-left:20px;margin-top:20px')
+      h4 Copies
 
-    for val in book_instances
-      hr
-      if val.status=='Available'
-        p.text-success #{val.status}
-      else if val.status=='Maintenance'
-        p.text-danger #{val.status}
-      else
-        p.text-warning #{val.status}
+      for bookcop in book_instances
+        hr
+        p #[strong Status: ]
+          +bookinstace_status(bookcop.status)
 
-      p #[strong Imprint:] #{val.imprint}
-      
-      if val.status != 'Available'
-        p #[strong Due back:] #{val.due_back_formatted}
-      p #[strong Id:]
-        a(href=val.url) #{val._id}
+        p #[strong Imprint:] #{bookcop.imprint}
+        
+        if bookcop.status != 'Available'
+          p #[strong Due back:] #{bookcop.due_back_formatted}
+        p #[strong Id:]
+          a(href=bookcop.url) #{bookcop._id}
 
-    else
-      p There are no copies of this book in the library.
-      
+  else
+    p Are you sure you want to delete This Book?
 
+      form(action="", method="POST")
+        .form-group
+          input#bookid.form-control(type="hidden", name="bookid", value=book._id, required)
+
+        button.btn.btn-primary(type="submit") Submit

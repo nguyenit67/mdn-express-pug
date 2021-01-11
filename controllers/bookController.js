@@ -175,7 +175,10 @@ exports.book_create_post = [
 exports.book_delete_get = (req, res, next) => {
   async.parallel({
     book: (callback) => {
-      Book.findById(req.params.id).exec(callback);
+      Book.findById(req.params.id)
+        .populate("author")
+        .populate("genre")
+        .exec(callback);
     },
     book_instances: (callback) => {
       BookInstance.find({ book: req.params.id }).exec(callback);
@@ -202,10 +205,13 @@ exports.book_delete_get = (req, res, next) => {
 exports.book_delete_post = (req, res, next) => {
   async.parallel({
     book: (callback) => {
-      Book.findById(req.params.id).exec(callback);
+      Book.findById(req.body.bookid)
+        .populate("author")
+        .populate("genre")
+        .exec(callback);
     },
     book_instances: (callback) => {
-      BookInstance.find({ book: req.params.id }).exec(callback);
+      BookInstance.find({ book: req.body.bookid }).exec(callback);
     },
   }, function (err, results) {
     if (err) {
