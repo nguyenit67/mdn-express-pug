@@ -36,7 +36,7 @@ module.exports = new class {
       if (error) { return next(error); }
 
       if (results.author == null) { // No results.
-        const err404 = new Error("Genre not found");
+        const err404 = new Error("Author not found");
         err404.status = 404;
         return next(err404);
       }
