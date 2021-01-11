@@ -173,13 +173,69 @@ exports.book_create_post = [
 // Display book delete form on GET.
 // eslint-disable-next-line no-unused-vars
 exports.book_delete_get = (req, res, next) => {
-  res.send("NOT IMPLEMENTED: book delete GET");
+  async.parallel({
+    book: (callback) => {
+      Book.findById(req.params.id).exec(callback);
+    },
+    book_copies: (callback) => {
+      BookInstance.find({ book: req.params.id }).exec(callback);
+    },
+  }, (err, results) => {
+    if (err) {
+      return next(err);
+    }
+
+    if (results.book == null) {
+      res.redirect("/catalog/books");
+    }
+
+    res.render("book_delete",
+      { title: "Delete Book",
+        book: results.book,
+        book_copies: results.book_copies,
+      });
+  });
 };
 
 // Handle book delete on POST.
 // eslint-disable-next-line no-unused-vars
 exports.book_delete_post = (req, res, next) => {
-  res.send("NOT IMPLEMENTED: book delete POST");
+  async.parallel({
+    book: (callback) => {
+      Book.findById(req.params.id).exec(callback);
+    },
+    book_copies: (callback) => {
+      BookInstance.find({ book: req.params.id }).exec(callback);
+    },
+  }, function (err, results) {
+    if (err) {
+      return next(err);
+    }
+
+    if (results.book == null) {
+      res.redirect("/catalog/books");
+    }
+
+    if (results.book_copies.length > 0) {
+      res.render("book_delete",
+        {
+          title: "Delete Book",
+          book: results.book,
+          book_copies: results.book_copies,
+        });
+    }
+    else {
+      Book.findByIdAndRemove(req.body.bookid, (findAndRmError) => {
+        if (findAndRmError) {
+          return next(findAndRmError);
+        }
+
+        res.redirect("/catalog/books");
+      });
+    }
+
+  });
+
 };
 
 // Display book update form on GET.
