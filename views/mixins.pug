@@ -1,0 +1,8 @@
+mixin bookinstace_status(status)
+  case status
+    when 'Available'
+      span.text-success #{status}
+    when 'Maintenance'
+      span.text-danger #{status}
+    default
+      span.text-warning #{status}
