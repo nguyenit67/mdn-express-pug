@@ -7,6 +7,8 @@ block content
     div.form-group
       label(for="name") Genre:
       input#name.form-control(type="text", placeholder="Fantasy, Poetry etc." name="name" value=(undefined===genre ? "" : genre.name) required)
+      input(type="hidden", name="genreid", value=(undefined===genre ? null : genre._id), required)
+
     button.btn.btn-primary(type="submit") Submit
 
   if errors
