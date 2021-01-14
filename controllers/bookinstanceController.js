@@ -156,6 +156,7 @@ module.exports = new (class {
         res.render("bookinstance_form", {
           title: "Edit Book Copy",
           bookinstance: results.bookinstance,
+          selected_book: results.bookinstance.book._id,
           book_list: results.book_list,
           status_enum: BookInstance.schema.path("status").enumValues,
         });
@@ -179,7 +180,18 @@ module.exports = new (class {
       }),
       body("imprint", "Imprint must be specified").trim().isLength({ min: 1 }).escape(),
       body("status").escape(),
-      body("due_back", "Invalid date").optional({ checkFalsy: true }).isISO8601().toDate(),
+      body("due_back", "Invalid date")
+        .exists({ checkFalsy: true })
+        .withMessage("Unavailable book copy cannot leave due back date empty!")
+        .isISO8601()
+        .toDate()
+        .withMessage("iso format wrong?")
+        .custom((due_back, { req }) => {
+          if (req.body.status !== "Available"
+              && due_back < new Date()) {
+            throw new Error("Unavailable book copy must be dued back after this moment!");
+          }
+        }),
       (req, res, next) => {
         const errors = validationResult(req);
         const bookinstance = new BookInstance(
