@@ -153,11 +153,66 @@ module.exports = new class {
 
   // Display Author update form on GET.
   author_update_get(req, res, next) {
-    res.send("NOT IMPLEMENTED: Author update GET");
+    Author.findById(req.params.id,
+      function (err, author) {
+        if (err) { return next(err); }
+
+        res.render("author_form", {
+          title: "Edit Author",
+          author,
+        });
+      });
   }
 
   // Handle Author update on POST.
-  author_update_post(req, res, next) {
-    res.send("NOT IMPLEMENTED: Author update POST");
+  get author_update_post() {
+    return [
+      body("first_name").trim().isLength({ min: 1 }).escape()
+        .withMessage("First name must be specified.")
+        .isAlphanumeric()
+        .withMessage("First name has non-alphanumeric characters."),
+      body("family_name").trim().isLength({ min: 1 }).escape()
+        .withMessage("Family name must be specified.")
+        .isAlphanumeric()
+        .withMessage("Family name has non-alphanumeric characters."),
+      body("date_of_birth", "Invalid date of birth").optional({ checkFalsy: true }).isISO8601().toDate(),
+      body("date_of_death", "Invalid date of death").optional({ checkFalsy: true }).isISO8601().toDate(),
+      (req, res, next) => {
+
+        // Extract the validation errors from a request.
+        const errors = validationResult(req);
+
+        const author = new Author(
+          {
+            _id: req.params.id, // #! VIP REQUIRED!
+            first_name: req.body.first_name,
+            family_name: req.body.family_name,
+            date_of_birth: req.body.date_of_birth,
+            date_of_death: req.body.date_of_death,
+          },
+        );
+
+        if (!errors.isEmpty()) {
+          // There are errors. Render form again with sanitized values/errors messages.
+          res.render("author_form", {
+            title: "Edit Author",
+            author,
+            errors: errors.array(),
+          });
+        }
+        else {
+          // Data from form is valid.
+
+          // Update an Author object with escaped and trimmed data.
+          Author.findByIdAndUpdate(req.params.id, author, {},
+            (findAndUpdError, theauthor) => {
+              if (findAndUpdError) { return next(findAndUpdError); }
+              // Successful - redirect to new author record.
+              res.redirect(theauthor.url);
+            },
+          );
+        }
+      },
+    ];
   }
 }();
