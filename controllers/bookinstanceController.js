@@ -1,4 +1,6 @@
 /* eslint-disable camelcase */
+const async = require("async");
+
 const { body, validationResult } = require("express-validator");
 const BookInstance = require("../models/bookinstance");
 const Book = require("../models/book");
@@ -134,18 +136,31 @@ module.exports = new (class {
 
   // Display bookinstance update form on GET.
   bookinstance_update_get(req, res, next) {
-    BookInstance.findById(req.params.id)
-      .populate("book")
-      .exec((err, bookinstance) => {
+
+    async.parallel(
+      {
+        bookinstance: (callback) => {
+          BookInstance.findById(req.params.id)
+            .populate("book")
+            .exec(callback);
+        },
+        book_list: (callback) => {
+          Book.find({}, "title").exec(callback);
+        },
+      },
+      (err, results) => {
         if (err) {
           return next(err);
         }
 
         res.render("bookinstance_form", {
           title: "Edit Book Copy",
-          bookinstance,
+          bookinstance: results.bookinstance,
+          book_list: results.book_list,
+          status_enum: BookInstance.schema.path("status").enumValues,
         });
-      });
+      },
+    );
   }
 
   // Handle bookinstance update on POST.
@@ -175,15 +190,7 @@ module.exports = new (class {
             due_back: req.body.due_back,
           });
 
-        if (errors.isEmpty()) {
-          BookInstance.findByIdAndUpdate(req.params.id, bookinstance, {}, (findNUpdErr, thebookinstance) => {
-            if (findNUpdErr) {
-              return next(findNUpdErr);
-            }
-            res.redirect(thebookinstance.url);
-          });
-        }
-        else {
+        if (!errors.isEmpty()) {
           Book.find({}, "title")
             .exec((err, book_list) => {
               if (err) { return next(err); }
@@ -194,13 +201,22 @@ module.exports = new (class {
               }
               // Successful, so render.
               res.render("bookinstance_form",
-                { title: "Create BookInstance",
+                { title: "Edit Book Copy",
                   book_list,
                   bookinstance,
                   selected_book,
                   errors: errors.array(),
                   status_enum: BookInstance.schema.path("status").enumValues,
                 });
+            });
+        }
+        else {
+          BookInstance.findByIdAndUpdate(req.params.id, bookinstance, {},
+            (findNUpdErr, thebookinstance) => {
+              if (findNUpdErr) {
+                return next(findNUpdErr);
+              }
+              res.redirect(thebookinstance.url);
             });
         }
       },
