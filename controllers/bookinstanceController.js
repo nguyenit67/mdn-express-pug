@@ -186,7 +186,9 @@ module.exports = new (class {
         // .withMessage("Unavailable book copy cannot leave due back date empty!")
         .isISO8601()
         .toDate()
-        .withMessage("iso format wrong?")
+        .withMessage("Invalid Date (format ISO8601  wrong?)")
+        .bail()
+        // ---------------------------------------------------------------------
         .custom((due_back) => new Date() < due_back)
         .withMessage("Unavailable book copy must be dued back after this moment!"),
 
