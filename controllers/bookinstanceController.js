@@ -188,7 +188,7 @@ module.exports = new (class {
         .toDate()
         .withMessage("Invalid Date (format ISO8601  wrong?)")
         .bail()
-        // ---------------------------------------------------------------------
+        // if not a valid date then no need to compare to NOW()
         .custom((due_back) => new Date() < due_back)
         .withMessage("Unavailable book copy must be dued back after this moment!"),
 
