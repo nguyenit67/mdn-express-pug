@@ -2,6 +2,7 @@
 const async = require("async");
 
 const { body, validationResult } = require("express-validator");
+const { DateTime } = require("luxon");
 const BookInstance = require("../models/bookinstance");
 const Book = require("../models/book");
 
@@ -45,6 +46,7 @@ module.exports = new (class {
           { title: "Create BookInstance",
             book_list,
             status_enum: BookInstance.schema.path("status").enumValues,
+            DateTime,
           });
       });
   }
@@ -110,6 +112,7 @@ module.exports = new (class {
                   selected_book,
                   errors: errors.array(),
                   status_enum: BookInstance.schema.path("status").enumValues,
+                  DateTime,
                 });
             });
         }
@@ -169,6 +172,7 @@ module.exports = new (class {
           selected_book: results.bookinstance.book._id,
           book_list: results.book_list,
           status_enum: BookInstance.schema.path("status").enumValues,
+          DateTime,
         });
       },
     );
@@ -229,6 +233,7 @@ module.exports = new (class {
                   selected_book,
                   errors: errors.array(),
                   status_enum: BookInstance.schema.path("status").enumValues,
+                  DateTime,
                 });
             });
         }

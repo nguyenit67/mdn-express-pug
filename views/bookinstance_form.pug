@@ -27,8 +27,11 @@ block content
       input#imprint.form-control(type='text' placeholder='Publisher and date information' name='imprint' required='true' value=((undefined===bookinstance) ? "" : bookinstance.imprint))
       
     .form-group
+      - const msPerDay = 24 * 60 * 60 * 1000;
+      - const tomorrow = new Date(Date.now() + msPerDay)
+
       label(for='due_back') Date when book available:
-      input#due_back.form-control(type='date' name='due_back' value=((undefined===bookinstance) ? "" : bookinstance.due_back_iso))
+      input#due_back.form-control(type='date', name='due_back', value=((undefined===bookinstance) ? "" : bookinstance.due_back_iso), min=DateTime.fromJSDate(tomorrow).toISODate())
 
     .form-group
       label(for="status") Status:
