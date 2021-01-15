@@ -25,13 +25,6 @@ block content
     .form-group
       label(for='imprint') Imprint:
       input#imprint.form-control(type='text' placeholder='Publisher and date information' name='imprint' required='true' value=((undefined===bookinstance) ? "" : bookinstance.imprint))
-      
-    .form-group
-      - const msPerDay = 24 * 60 * 60 * 1000;
-      - const tomorrow = new Date(Date.now() + msPerDay)
-
-      label(for='due_back') Date when book available:
-      input#due_back.form-control(type='date', name='due_back', value=((undefined===bookinstance) ? "" : bookinstance.due_back_iso), min=DateTime.fromJSDate(tomorrow).toISODate())
 
     .form-group
       label(for="status") Status:
@@ -43,13 +36,41 @@ block content
             option(value=state, selected=(state===bookinstance.status) ? "selected" : false) #{state}
           else
             option(value=state) #{state}
+
+    .form-group.n-due-back-group
+      - const msPerDay = 24 * 60 * 60 * 1000;
+      - const tomorrow = new Date(Date.now() + msPerDay)
+
+      label(for='due_back') Date when book available:
+      input#due_back.form-control(type='date', name='due_back', value=((undefined===bookinstance) ? "" : bookinstance.due_back_iso), min=DateTime.fromJSDate(tomorrow).toISODate())
+
     
-
     button.btn.btn-primary(type='submit') Submit
-
-
 
   if errors
     ul
       for err in errors
         li!= err.msg
+
+  script.
+    console.log("hilo");
+    $(document).ready(function() {
+      const toggleShowDueBack = function (event) {
+        console.log(this);
+        console.log(this.value);
+        const target = $("#status")[0];
+
+        console.log(target);
+        console.log(target.value);
+
+        if (target.value !== "" && target.value !== "Available") {
+          $(".n-due-back-group").css("display", "block"); //show
+        }
+        else {
+          $(".n-due-back-group").css("display", "none"); // hide
+        }
+      } 
+
+      toggleShowDueBack();
+      $("#status").on("input", toggleShowDueBack);
+    })
