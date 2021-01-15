@@ -60,12 +60,22 @@ module.exports = new (class {
             return Promise.reject(new Error("Book not found! :<"));
           }
         }).catch((err) => {
-          return Promise.reject(new Error("Book not found! :<"));
+          return Promise.reject(new Error(`Book not found! >:${err.message}`));
         });
       }),
       body("imprint", "Imprint must be specified").trim().isLength({ min: 1 }).escape(),
       body("status").escape(),
-      body("due_back", "Invalid date").optional({ checkFalsy: true }).isISO8601().toDate(),
+      body("due_back")
+        .if((_value, { req }) => req.body.status !== "Available")
+      // .exists({ checkFalsy: true })
+      // .withMessage("Unavailable book copy cannot leave due back date empty!")
+        .isISO8601()
+        .toDate()
+        .withMessage("Invalid Date (format ISO8601  wrong?)")
+        .bail()
+      // if not a valid date then no need to compare to NOW()
+        .custom((due_back) => new Date() < due_back)
+        .withMessage("Unavailable book copy must be dued back after this moment!"),
       (req, res, next) => {
         const errors = validationResult(req);
         const bookinstance = new BookInstance(
