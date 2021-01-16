@@ -57,17 +57,28 @@ module.exports = new class {
         .withMessage("First name must be specified.")
         .isAlphanumeric()
         .withMessage("First name has non-alphanumeric characters."),
+
       body("family_name").trim().isLength({ min: 1 }).escape()
         .withMessage("Family name must be specified.")
         .isAlphanumeric()
         .withMessage("Family name has non-alphanumeric characters."),
+
       body("date_of_birth", "Invalid date of birth").optional({ checkFalsy: true }).isISO8601().toDate(),
-      // comment for read
-      body("date_of_death", "Invalid date of death").optional({ checkFalsy: true }).isISO8601().toDate()
-        .if(body("date_of_birth").exists())
-        .if((value) => value)
-        .custom((date_of_death, { req }) => (req.body.date_of_birth < date_of_death)),
-      // .withMessage("“Death must come after Birth” – Invalid date of death"),
+
+      body("date_of_death", "Invalid date of death")
+        .optional({ checkFalsy: true })
+        // stop when blank
+        .isISO8601()
+        .bail()
+        // stop when not ISO
+        .toDate()
+        .if((_value, { req }) => (req.body.date_of_birth instanceof Date))
+        .if((date_of_death) => (date_of_death instanceof Date))
+        // compare ONLY WHEN both fields are valid Date objects
+        .custom((date_of_death, { req }) => {
+          return (req.body.date_of_birth < date_of_death);
+        })
+        .withMessage("“Death must come after Birth” – Invalid date of death"),
       (req, res, next) => {
 
         // Extract the validation errors from a request.
@@ -184,7 +195,6 @@ module.exports = new class {
 
       body("date_of_birth", "Invalid date of birth").optional({ checkFalsy: true }).isISO8601().toDate(),
 
-      // debugging...
       body("date_of_death", "Invalid date of death")
         .optional({ checkFalsy: true })
         // stop when blank
