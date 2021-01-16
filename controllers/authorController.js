@@ -182,10 +182,7 @@ module.exports = new class {
         .isAlphanumeric()
         .withMessage("Family name has non-alphanumeric characters."),
 
-      body("date_of_birth", "Invalid date of birth").optional({ checkFalsy: true }).isISO8601().toDate()
-        // "" -> no log
-        // else
-        .custom(() => console.log("Falsy?!") || true),
+      body("date_of_birth", "Invalid date of birth").optional({ checkFalsy: true }).isISO8601().toDate(),
 
       // debugging...
       body("date_of_death", "Invalid date of death")
