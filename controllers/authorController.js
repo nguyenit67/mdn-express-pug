@@ -84,23 +84,27 @@ module.exports = new class {
         // Extract the validation errors from a request.
         const errors = validationResult(req);
 
+        const author = new Author(
+          {
+            first_name: req.body.first_name,
+            family_name: req.body.family_name,
+            date_of_birth: req.body.date_of_birth,
+            date_of_death: req.body.date_of_death,
+          },
+        );
+
         if (!errors.isEmpty()) {
           // There are errors. Render form again with sanitized values/errors messages.
-          res.render("author_form", { title: "Create Author", author: req.body, errors: errors.array() });
-
+          res.render("author_form", {
+            title: "Create Author",
+            author,
+            errors: errors.array(),
+          });
         }
         else {
           // Data from form is valid.
 
           // Create an Author object with escaped and trimmed data.
-          const author = new Author(
-            {
-              first_name: req.body.first_name,
-              family_name: req.body.family_name,
-              date_of_birth: req.body.date_of_birth,
-              date_of_death: req.body.date_of_death,
-            },
-          );
           author.save((err) => {
             if (err) { return next(err); }
             // Successful - redirect to new author record.
