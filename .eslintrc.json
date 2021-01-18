@@ -27,7 +27,7 @@
     "func-names": "off",
     "object-curly-newline": "off",
     "function-paren-newline": "off",
-    "brace-style": ["off", "stroustrup", { "allowSingleLine": false }],
+    "brace-style": ["warn", "stroustrup", { "allowSingleLine": true }],
     "no-console": "off",
     "prefer-arrow-callback": "off",
     "arrow-body-style": "off",
