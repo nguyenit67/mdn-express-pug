@@ -8,6 +8,7 @@
     "joeberria.statusbarerror",
     "usernamehw.errorlens",
     "jabacchetta.vscode-essentials",
-    "vivaxy.vscode-conventional-commits"
+    "vivaxy.vscode-conventional-commits",
+    "eg2.vscode-npm-script"
   ]
 }
