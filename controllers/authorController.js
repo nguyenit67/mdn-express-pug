@@ -1,3 +1,5 @@
+const debug = require("debug")("author");
+
 const async = require("async");
 
 const { body, validationResult } = require("express-validator");
@@ -12,6 +14,7 @@ module.exports = new class {
       .sort([["family_name", "ascending"]])
       .exec((error, list_authors) => {
         if (error) {
+          debug(`ListAll error: ${error}`);
           return next(error);
         }
         // Successful, so render
