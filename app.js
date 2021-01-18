@@ -20,8 +20,10 @@ app.use(compression());
 
 // database connection setup
 
+const username = "Uchiha";
 const passwd = "ptM0qwc19W9HziXc";
-const mongoDB = `mongodb+srv://Uchiha:${passwd}@cluster0.adbv3.mongodb.net/local_library?retryWrites=true&w=majority`;
+const dev_DB_url = `mongodb+srv://${username}:${passwd}@cluster0.adbv3.mongodb.net/local_library?retryWrites=true&w=majority`;
+const mongoDB = process.env.MONGODB_URI || dev_DB_url;
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
