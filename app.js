@@ -6,6 +6,8 @@ const logger = require("morgan");
 
 const mongoose = require("mongoose");
 const compression = require("compression");
+const helmet = require("helmet");
+
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 const wikiRouter = require("./routes/wiki");
@@ -13,6 +15,7 @@ const catalogRouter = require("./routes/catalog");
 
 const app = express();
 
+app.use(helmet());
 app.use(compression());
 
 // database connection setup
