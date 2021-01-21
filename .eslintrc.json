@@ -23,6 +23,7 @@
     "no-param-reassign": "warn",
     "no-multiple-empty-lines": "warn",
     "no-empty": "warn",
+    "padded-blocks": ["warn", "never"],
     // "semi":"warn",
 
     "func-names": "off",
@@ -37,7 +38,6 @@
     "camelcase": "off",
     "eol-last": "off",
     "max-len": "off",
-    "padded-blocks": "off",
     "no-plusplus": "off",
     "consistent-return": "off"
   }
