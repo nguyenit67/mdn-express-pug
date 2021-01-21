@@ -22,6 +22,7 @@ function luhnCheck(numString = "0000 0000 0000 0000") {
     if ((i % 2) === 1) {
       const index = digits.length - 1 - i;
       const doubleDigit = digits[index] * 2;
+      // eslint-disable-next-line no-mixed-operators
       digits[index] = (Math.trunc(doubleDigit / 10) + doubleDigit % 10) % 10;
     }
   }
