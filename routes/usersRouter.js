@@ -5,6 +5,8 @@ const user_controller = require("../controllers/userController");
 
 router.get("/list/all", user_controller.user_list);
 
+router.get("/dashboard", user_controller.user_dashboard);
+
 router.get("/register", user_controller.register_get);
 
 router.post("/register", user_controller.register_post);
