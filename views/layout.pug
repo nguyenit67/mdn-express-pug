@@ -11,7 +11,7 @@ html(lang='en')
     <script src="/javascripts/jquery-3.5.1.min.js"></script>
     script(src="/javascripts/bootstrap-4.5.2.min.js")
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    
+
 
     link(rel='stylesheet', href='/stylesheets/style.css')
     link(rel="icon", href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📚</text></svg>")
@@ -32,8 +32,10 @@ html(lang='en')
                 a(href='/catalog/genres') All genres
               li
                 a(href='/catalog/bookinstances') All book-copies
+
               li
                 hr
+
               li
                 a(href='/catalog/author/create') Create new author
               li
@@ -42,6 +44,16 @@ html(lang='en')
                 a(href='/catalog/book/create') Create new book
               li
                 a(href='/catalog/bookinstance/create') Create new book instance (copy)
+
+              li
+                hr
+              li
+                a(href='/user/list/all') All Users
+              li
+                a(href='/user/login') Log In
+              li
+                a(href='/user/register') Sign Up
+
 
         div(class='col-sm-10')
           block content
