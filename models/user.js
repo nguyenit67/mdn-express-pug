@@ -8,7 +8,7 @@ const UserSchema = new mongoose.Schema({
 });
 
 UserSchema.virtual("url").get(function () {
-  return `/catalog/User/${this._id}`;
+  return `/user/${this._id}`;
 });
 
 // Export model
