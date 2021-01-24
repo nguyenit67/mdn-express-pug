@@ -1,4 +1,6 @@
 /* eslint-disable no-unused-vars */
+const bcryptjs = require("bcryptjs");
+
 const User = require("../models/user");
 
 exports.user_list = (req, res, next) => {
@@ -32,12 +34,21 @@ exports.register_get = (req, res, next) => {
 };
 
 exports.register_post = (req, res, next) => {
-  const user = new User(req.body);
+  const hashedPassword = bcryptjs.hashSync(req.body.password, 14);
+
+  const user = new User({
+
+    name: req.body.name,
+    email: req.body.email,
+    password: hashedPassword,
+
+  });
 
   user.save((err) => {
     if (err) {
       let error = "Something bad happened! Please try again.";
 
+      // @ts-ignore
       if (err.code === 11000) {
         error = "That email is already taken, please try another!";
       }
@@ -55,7 +66,7 @@ exports.login_get = (req, res, next) => {
 
 exports.login_post = (req, res, next) => {
   User.findOne({ email: req.body.email }, (err, user) => {
-    if (err || !user || req.body.password !== user.password) {
+    if (err || !user || !bcryptjs.compareSync(req.body.password, user.password)) {
       return res.render("user_login_form", {
         errors: [{ msg: "Incorrect email / password." }],
       });
