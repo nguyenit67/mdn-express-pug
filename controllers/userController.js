@@ -14,10 +14,6 @@ exports.user_list = (req, res, next) => {
 };
 
 exports.user_dashboard = (req, res, next) => {
-  if (!(req?.session.userId)) {
-    return res.redirect("/user/login");
-  }
-
   User.findById(req.session.userId, (error, user) => {
     if (error) {
       return next(error);

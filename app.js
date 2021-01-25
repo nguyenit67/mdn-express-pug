@@ -15,6 +15,7 @@ const userRouter = require("./routes/usersRouter");
 
 // no usage
 const wikiRouter = require("./routes/wiki");
+const User = require("./models/user");
 
 const app = express();
 
@@ -51,6 +52,33 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 // place compression middleware here
 app.use(express.static(path.join(__dirname, "public")));
+
+// Smart Retrive User Middleware
+app.use((req, res, next) => {
+  // @ts-ignore
+  if (!req?.session.userId) {
+    return next();
+  }
+
+  // @ts-ignore
+  User.findById(req.session.userId, (err, user) => {
+    if (err) {
+      return next(err);
+    }
+
+    if (!user) {
+      return next();
+    }
+
+    user.password = undefined; // never pull password out of db
+
+    // @ts-ignore
+    req.user = user;
+    res.locals.user = user;
+
+    next();
+  });
+});
 
 app.use("/", indexRouter);
 app.use("/user", userRouter);
