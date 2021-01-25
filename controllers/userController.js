@@ -14,15 +14,7 @@ exports.user_list = (req, res, next) => {
 };
 
 exports.user_dashboard = (req, res, next) => {
-  User.findById(req.session.userId, (error, user) => {
-    if (error) {
-      return next(error);
-    }
-    if (!user) {
-      return res.redirect("/user/login");
-    }
-    res.send("Dashboard => Here");
-  });
+  res.send("Dashboard => Here");
 };
 
 exports.register_get = (req, res, next) => {
