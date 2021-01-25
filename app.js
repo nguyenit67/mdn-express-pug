@@ -55,11 +55,13 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Smart Retrive User Middleware
 app.use((req, res, next) => {
+  // check if cookie session of userId sent to server
   // @ts-ignore
-  if (!req?.session.userId) {
-    return next();
+  if (!(req?.session.userId)) {
+    return next(); // no cookie so go -> next resolver middleware
   }
 
+  // cookie session exist
   // @ts-ignore
   User.findById(req.session.userId, (err, user) => {
     if (err) {
