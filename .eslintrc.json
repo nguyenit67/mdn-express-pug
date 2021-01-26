@@ -25,10 +25,10 @@
     "no-empty": "warn",
     "padded-blocks": ["warn", "never"],
     "import/newline-after-import": "warn",
+    "object-curly-newline": "warn",
     // "semi":"warn",
 
     "func-names": "off",
-    "object-curly-newline": "off",
     "function-paren-newline": "off",
     "brace-style": ["warn", "stroustrup", { "allowSingleLine": true }],
     "no-console": "off",
