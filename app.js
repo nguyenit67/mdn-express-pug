@@ -8,6 +8,7 @@ const sessions = require("client-sessions");
 const mongoose = require("mongoose");
 const compression = require("compression");
 const helmet = require("helmet");
+const csurf = require("csurf");
 
 const indexRouter = require("./routes/index");
 const catalogRouter = require("./routes/catalog");
@@ -49,7 +50,10 @@ app.set("view engine", "pug");
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
 app.use(cookieParser());
+
+app.use(csurf());
 // place compression middleware here
 app.use(express.static(path.join(__dirname, "public")));
 

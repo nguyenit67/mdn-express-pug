@@ -18,7 +18,10 @@ exports.user_dashboard = (req, res, next) => {
 };
 
 exports.register_get = (req, res, next) => {
-  res.render("user_register_form", { title: "User Registration" });
+  res.render("user_register_form", {
+    title: "User Registration",
+    csrfToken: req.csrfToken(),
+  });
 };
 
 exports.register_post = (req, res, next) => {
@@ -49,7 +52,7 @@ exports.register_post = (req, res, next) => {
 };
 
 exports.login_get = (req, res, next) => {
-  res.render("user_login_form", { title: "User Login" });
+  res.render("user_login_form", { title: "User Login", csrfToken: req.csrfToken() });
 };
 
 exports.login_post = (req, res, next) => {
